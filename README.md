@@ -10,9 +10,7 @@ Open up the AppDelegate.m file and edit applicationDidBecomeActive: to be like s
 
     SRGTimeCheatCapturer *capturer = [SRGTimeCheatCapturer new];
     [capturer checkWithOnCheatCaptured:^(){
-    
     	// Here, you can show warning or impose a penalty if user cheating device time. 
-       
     }];
     
 }
