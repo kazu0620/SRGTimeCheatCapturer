@@ -108,6 +108,8 @@ static double ntpDiffSeconds(struct ntpTimestamp * start, struct ntpTimestamp * 
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛*/
 - (void) finish {
     [repeatingTimer setFireDate:[NSDate distantFuture]];
+    trusty = FALSE;
+    offset = 0.0;
 
     NTP_Logging(@"stopped: [%@]", server);
 }

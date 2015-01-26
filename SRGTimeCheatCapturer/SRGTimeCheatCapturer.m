@@ -14,7 +14,7 @@
 
 - (instancetype) init {
     if( self = [super init] ){
-        _allowableDiff = 1.0;
+        _allowableDiff = 60.0;
     }
     return self;
 }
@@ -28,6 +28,7 @@
     __weak typeof(self) wself = self;
     
     NetworkClock *clock = [NetworkClock sharedNetworkClock];
+    [clock enableAssociations];
     clock.onTimeAcquisitionFinished = ^(NSDate *networkTime){
         NSTimeInterval deviceTime  = [[NSDate date] timeIntervalSince1970];
         NSTimeInterval networkDate = [networkTime timeIntervalSince1970];

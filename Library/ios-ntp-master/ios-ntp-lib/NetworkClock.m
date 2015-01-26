@@ -16,6 +16,7 @@
     NSTimeInterval          timeIntervalSinceDeviceTime;            // milliSeconds
     NSMutableArray *        timeAssociations;
     NSArray *               sortDescriptors;
+    BOOL                    isAssociationsEnabled;
 
 }
 
@@ -168,7 +169,28 @@
     }
 
     NTP_Logging(@"%@", hostAddresses);
+    
+/*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │  set notifications to associations;
+  └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
+    [self enableAssociations];
+    
+/*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │  ... now start an 'association' (network clock object) for each address.                         │
+  └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
+    for (NSString * server in hostAddresses) {
+        NetAssociation *    timeAssociation = [[NetAssociation alloc] init:server];
 
+        [timeAssociations addObject:timeAssociation];
+        [timeAssociation enable];                               // starts are randomized internally
+    }
+}
+
+- (void) enableAssociations {
+    if ( isAssociationsEnabled ) {
+        return;
+    }
+    for (NetAssociation *timeAssociation in timeAssociations) [timeAssociation enable];
 /*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
   │ associationTrue -- notification from a 'truechimer' association of a trusty offset               │
   └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
@@ -180,7 +202,7 @@
                     (unsigned long)[timeAssociations count]);
         [self offsetAverage];
     }];
-
+    
 /*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
   │ associationFake -- notification from an association that became a 'falseticker'                  │
   │ .. if we already have 8 associations in play, drop this one.                                     │
@@ -198,20 +220,8 @@
             association = nil;
         }
     }];
-
-/*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │  ... now start an 'association' (network clock object) for each address.                         │
-  └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
-    for (NSString * server in hostAddresses) {
-        NetAssociation *    timeAssociation = [[NetAssociation alloc] init:server];
-
-        [timeAssociations addObject:timeAssociation];
-        [timeAssociation enable];                               // starts are randomized internally
-    }
-}
-
-- (void) enableAssociations {
-
+    
+    isAssociationsEnabled = YES;
 }
 
 - (void) reportAssociations {
@@ -224,6 +234,7 @@
 - (void) finishAssociations {
     for (NetAssociation * timeAssociation in timeAssociations) [timeAssociation finish];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    isAssociationsEnabled = NO;
 }
 
 /*┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
