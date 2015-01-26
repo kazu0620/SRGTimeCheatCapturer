@@ -12,7 +12,7 @@
 
 typedef void (^SRGTimeCheatCapturerEvent)();
 
-@property float allowableDiff;
+@property float allowableTimeDiff;
 
 - (void) checkWithOnCheatCaptured:(SRGTimeCheatCapturerEvent)onCaptured;
 

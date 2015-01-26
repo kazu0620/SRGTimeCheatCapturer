@@ -31,17 +31,16 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     SRGTimeCheatCapturer *capturer = [SRGTimeCheatCapturer new];
-    capturer.allowableDiff = 300.0; // default value is 60.0
-    __weak typeof(self) wself = self;
+    capturer.allowableTimeDiff = 300.0; // default value is 50.0
+    __weak typeof(self) wself  = self;
     [capturer checkWithOnCheatCaptured:^(){
         [wself showTimeCheatWarning];
     }];
-    
 }
 
 // Cheat Warning Alert
 - (void) showTimeCheatWarning {
-     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Warning" message:@"You are cheating time." preferredStyle:UIAlertControllerStyleAlert];
+     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Warning" message:@"You are cheating." preferredStyle:UIAlertControllerStyleAlert];
      [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
          NSURL *url = [NSURL URLWithString:@"itms://itunes.com/apps/"];
          [[UIApplication sharedApplication] openURL:url];

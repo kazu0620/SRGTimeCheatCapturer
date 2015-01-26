@@ -14,7 +14,7 @@
 
 - (instancetype) init {
     if( self = [super init] ){
-        _allowableDiff = 60.0;
+        _allowableTimeDiff = 50.0;
     }
     return self;
 }
@@ -33,7 +33,7 @@
         NSTimeInterval deviceTime  = [[NSDate date] timeIntervalSince1970];
         NSTimeInterval networkDate = [networkTime timeIntervalSince1970];
         NSTimeInterval diff = abs( deviceTime - networkDate );
-        if ( diff > wself.allowableDiff ) {
+        if ( diff > wself.allowableTimeDiff ) {
             onCaptured();
         }
     };
