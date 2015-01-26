@@ -1,4 +1,8 @@
 # SRGTimeCheatCapturer
+[![Version](https://img.shields.io/cocoapods/v/SRGTimeCheatCapturer.svg?style=flat)](https://github.com/kazu0620/SRGTimeCheatCapturer)
+[![License](https://img.shields.io/cocoapods/l/SRGTimeCheatCapturer.svg?style=flat)](https://github.com/kazu0620/SRGTimeCheatCapturer)
+[![Platform](https://img.shields.io/cocoapods/p/SRGTimeCheatCapturer.svg?style=flat)](https://github.com/kazu0620/SRGTimeCheatCapturer)
+
 SRGTimeCheatCapturer validate device time  by ntp client and capture time cheaters.
 
 ##Examples
