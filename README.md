@@ -1,5 +1,5 @@
 # SRGTimeCheatCapturer
-SRGTimeCheatCapturer validate device time and capture time cheaters by ntp.
+SRGTimeCheatCapturer validate device time  by ntp client and capture time cheaters
 
 ##Examples
 Open up the AppDelegate.m file and edit applicationDidBecomeActive: to be like so:
