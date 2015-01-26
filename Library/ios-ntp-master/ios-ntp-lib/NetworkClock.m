@@ -171,11 +171,6 @@
     NTP_Logging(@"%@", hostAddresses);
     
 /*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │  set notifications to associations;
-  └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
-    [self enableAssociations];
-    
-/*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
   │  ... now start an 'association' (network clock object) for each address.                         │
   └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
     for (NSString * server in hostAddresses) {
@@ -184,11 +179,21 @@
         [timeAssociations addObject:timeAssociation];
         [timeAssociation enable];                               // starts are randomized internally
     }
+/*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │  set notifications to associations;
+  └──────────────────────────────────────────────────────────────────────────────────────────────────┘*/
+    [self enableAssociations];
 }
 
 - (void) enableAssociations {
     if ( isAssociationsEnabled ) {
         return;
+    }
+    if( timeAssociations.count == 0 ){
+        [[[NSOperationQueue alloc] init] addOperation:[[NSInvocationOperation alloc]
+                                                  initWithTarget:self
+                                                        selector:@selector(createAssociations)
+                                                          object:nil]];
     }
     for (NetAssociation *timeAssociation in timeAssociations) [timeAssociation enable];
 /*┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -233,6 +238,7 @@
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛*/
 - (void) finishAssociations {
     for (NetAssociation * timeAssociation in timeAssociations) [timeAssociation finish];
+    [timeAssociations removeAllObjects];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     isAssociationsEnabled = NO;
 }
@@ -265,6 +271,7 @@
             _onTimeAcquisitionFinished( [self networkTime] );
         }
         _onTimeAcquisitionFinished = nil;
+        timeIntervalSinceDeviceTime = 0.0;
         [self finishAssociations];
     }
 }

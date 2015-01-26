@@ -25,15 +25,14 @@
         return;
     }
     
-    __weak typeof(self) wself = self;
-    
     NetworkClock *clock = [NetworkClock sharedNetworkClock];
+    float allowableDiff = _allowableTimeDiff;
     [clock enableAssociations];
     clock.onTimeAcquisitionFinished = ^(NSDate *networkTime){
         NSTimeInterval deviceTime  = [[NSDate date] timeIntervalSince1970];
         NSTimeInterval networkDate = [networkTime timeIntervalSince1970];
         NSTimeInterval diff = abs( deviceTime - networkDate );
-        if ( diff > wself.allowableTimeDiff ) {
+        if ( diff > allowableDiff ) {
             onCaptured();
         }
     };
