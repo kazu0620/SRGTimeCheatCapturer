@@ -15,6 +15,7 @@ Open up the AppDelegate.m file and edit applicationDidBecomeActive: to be like s
     
 }
 ```
+See the demo project for more examples.
 
 ##Setup Instructions
 Install with [CocoaPods](http://cocoapods.org) by adding the following to your Podfile:
